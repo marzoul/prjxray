@@ -69,6 +69,12 @@ def gen_sites():
             int(re.match('IOB_X[0-9]+Y([0-9]+)', site).group(1))
             for site in pad_sites
         ]
+
+        # Handle excluded sites (some may not be bonded)
+        if len(pad_sites) == 0:
+            print("//Sites skipped because no pad found: {}".format(sites))
+            continue
+
         pad_sites, _ = zip(
             *sorted(zip(pad_sites, pad_sites_y), key=lambda x: x[1]))
 

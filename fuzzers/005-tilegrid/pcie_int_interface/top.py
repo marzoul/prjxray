@@ -30,41 +30,73 @@ def get_pcie_int_tiles(grid, pcie_loc):
 
         return None
 
-    pcie_int_tiles = list()
+    # Keep the PCIE_INT_INTERFACE tiles that have the LOC closest possible to desired pcie_loc
+    # (lowest possible while still higher than pcie_loc.y)
+    keep_left_loc_y = None
+    keep_left_tile_name = None
+    keep_left_site = None
+
+    keep_right_loc_y = None
+    keep_right_tile_name = None
+    keep_right_site = None
 
     for tile_name in sorted(grid.tiles()):
         if not tile_name.startswith("PCIE_INT_INTERFACE"):
             continue
 
         m = GTP_INT_Y_RE.match(tile_name)
-
         assert m
 
         int_y = int(m.group(1))
+        if int_y % 50 != 0:
+            continue
 
-        if int_y % 50 == 0:
-            loc = grid.loc_of_tilename(tile_name)
-            is_left = loc.grid_x < pcie_loc.grid_x
+        loc = grid.loc_of_tilename(tile_name)
+        if loc.grid_y < pcie_loc.grid_y:
+            continue
 
-            if is_left:
-                for i in range(1, loc.grid_x):
-                    loc_grid_x = loc.grid_x - i
+        is_left = loc.grid_x < pcie_loc.grid_x
+        if is_left:
 
-                    site = get_site_at_loc(GridLoc(loc_grid_x, loc.grid_y))
+            if keep_left_site:
+                if loc.grid_y > keep_left_loc_y:
+                    continue
+            keep_left_loc_y = loc.grid_y
+            keep_left_tile_name = tile_name
 
-                    if site:
-                        break
-            else:
-                _, x_max, _, _ = grid.dims()
-                for i in range(1, x_max - loc.grid_x):
-                    loc_grid_x = loc.grid_x + i
+            for i in range(1, loc.grid_x):
+                loc_grid_x = loc.grid_x - i
 
-                    site = get_site_at_loc(GridLoc(loc_grid_x, loc.grid_y))
+                site = get_site_at_loc(GridLoc(loc_grid_x, loc.grid_y))
 
-                    if site:
-                        break
+                if site:
+                    keep_left_site = site
+                    break
 
-            pcie_int_tiles.append((tile_name, is_left, site))
+        else:
+
+            if keep_right_site:
+                if loc.grid_y > keep_right_loc_y:
+                    continue
+
+            keep_right_loc_y = loc.grid_y
+            keep_right_tile_name = tile_name
+
+            _, x_max, _, _ = grid.dims()
+            for i in range(1, x_max - loc.grid_x):
+                loc_grid_x = loc.grid_x + i
+
+                site = get_site_at_loc(GridLoc(loc_grid_x, loc.grid_y))
+
+                if site:
+                    keep_right_site = site
+                    break
+
+    assert keep_left_site and keep_right_site
+
+    pcie_int_tiles = list()
+    pcie_int_tiles.append((keep_left_tile_name, True, keep_left_site))
+    pcie_int_tiles.append((keep_right_tile_name, False, keep_right_site))
 
     return pcie_int_tiles
 
@@ -115,19 +147,19 @@ module top();
 
         print(
             '''
-wire [1:0] PLDIRECTEDLINKCHANGE;
-wire [68:0] MIMTXRDATA;
+wire [1:0] PLDIRECTEDLINKCHANGE_{site};
+wire [68:0] MIMTXRDATA_{site};
 
 (* KEEP, DONT_TOUCH, LOC = "{left}" *)
-LUT1 left_lut_{left} (.O(MIMTXRDATA[0]));
+LUT1 left_lut_{left} (.O(MIMTXRDATA_{site}[0]));
 
 (* KEEP, DONT_TOUCH, LOC = "{right}" *)
-LUT1 right_lut_{right} (.O(PLDIRECTEDLINKCHANGE[0]));
+LUT1 right_lut_{right} (.O(PLDIRECTEDLINKCHANGE_{site}[0]));
 
 (* KEEP, DONT_TOUCH, LOC = "{site}" *)
-PCIE_2_1 pcie_2_1_{site} (
-    .PLDIRECTEDLINKCHANGE(PLDIRECTEDLINKCHANGE),
-    .MIMTXRDATA(MIMTXRDATA)
+PCIE_2_1 {site} (
+    .PLDIRECTEDLINKCHANGE(PLDIRECTEDLINKCHANGE_{site}),
+    .MIMTXRDATA(MIMTXRDATA_{site})
 );'''.format(site=site_name, right=right_side, left=left_side))
 
     print("endmodule")

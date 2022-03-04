@@ -23,7 +23,7 @@ def gen_sites():
         gridinfo = grid.gridinfo_at_loc(loc)
 
         for site_name, site_type in gridinfo.sites.items():
-            if site_type in ['GTPE2_CHANNEL']:
+            if site_type in ['GTXE2_CHANNEL']:
                 yield tile_name, site_name
 
 
@@ -46,12 +46,10 @@ module top(input wire in, output wire out);
                                              util.gen_fuzz_states(len(sites))):
         params[tile_name] = (site_name, isone)
 
-        print(
-            '''
-    (* KEEP, DONT_TOUCH, LOC = "{}" *)
-   GTPE2_CHANNEL #(
-        .RXSYNC_OVRD(1'b{})
-    ) gtpe2_channel_{} ();'''.format(site_name, isone, site_name))
+        print('''
+    (* KEEP, DONT_TOUCH, LOC = "{site}" *)
+    GTXE2_CHANNEL #(
+    ) {site} ();'''.format(attr=attr, site=site_name))
 
     print("endmodule")
     write_params(params)

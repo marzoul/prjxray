@@ -47,7 +47,15 @@ def load_db(fn):
         parts = l.split(' ')
         tagstr = parts[0]
         addrlist = parts[1:]
+
+        # Debug code
+        if any(s == '<const0>' or s == '<const1>' for s in addrlist):
+          print("Issue with: {}".format(l))
+          continue
+
+        # Original assert code
         assert not any(s == '<const0>' for s in addrlist), (fn, l)
+
         check_frames(tagstr, addrlist)
         # Take the first address in the list
         frame, wordidx, bitidx = parse_addr(addrlist[0])

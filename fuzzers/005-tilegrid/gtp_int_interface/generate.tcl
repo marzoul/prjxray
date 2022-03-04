@@ -45,14 +45,25 @@ proc route_through_delay {} {
             continue
         }
 
-        set net_name "PLL0LOCKEN_$key"
+        set net_name "QPLLLOCKEN_$key"
         set net [get_nets $net_name]
 
-        set wire [get_wires -of_objects $net -filter {TILE_NAME =~ "*GTP_INT_INTERFACE*" && NAME =~ "*IMUX_OUT42*"}]
+        set wire [get_wires -of_objects $net -filter {TILE_NAME =~ "*GTX_INT_INTERFACE*" && NAME =~ "*IMUX_OUT24*"}]
+        if { [llength $wire] != 1 } {
+            puts "Error getting wire related to IMUX_OUT24"
+            write_checkpoint -force design.dcp
+            exit 1
+        }
+
         set wire_parts [split $wire "/"]
 
         set gtp_int_tile [lindex $wire_parts 0]
-        set node [get_nodes -of_object [get_tiles $gtp_int_tile] -filter { NAME =~ "*DELAY42" }]
+        set node [get_nodes -of_object [get_tiles $gtp_int_tile] -filter { NAME =~ "*DELAY24" }]
+        if { [llength $node] != 1 } {
+            puts "Error getting wire related to DELAY24"
+            write_checkpoint -force design.dcp
+            exit 1
+        }
 
         route_design -unroute -nets $net
         puts "Attempting to route net $net through $node."

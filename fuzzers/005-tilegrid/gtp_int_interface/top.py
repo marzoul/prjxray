@@ -16,12 +16,12 @@ from prjxray import util
 from prjxray.db import Database
 from prjxray.grid_types import GridLoc
 
-GTP_INT_Y_RE = re.compile("GTP_INT_INTERFACE.*X[0-9]+Y([0-9]+)")
+GTP_INT_Y_RE = re.compile("GTX_INT_INTERFACE.*X[0-9]+Y([0-9]+)")
 
 
 def get_gtp_int_tile(clock_region, grid):
     for tile_name in sorted(grid.tiles()):
-        if not tile_name.startswith("GTP_INT_INTERFACE"):
+        if not tile_name.startswith("GTX_INT_INTERFACE"):
             continue
 
         loc = grid.loc_of_tilename(tile_name)
@@ -58,7 +58,7 @@ def gen_sites():
         gridinfo = grid.gridinfo_at_loc(loc)
 
         for site_name, site_type in gridinfo.sites.items():
-            if site_type in ['GTPE2_COMMON']:
+            if site_type in ['GTXE2_COMMON']:
                 gtp_int_tile = get_gtp_int_tile(gridinfo.clock_region, grid)
 
                 yield gtp_int_tile, site_name
@@ -84,16 +84,15 @@ module top();
 
         params[gtp_int_tile] = (site_name, isone)
 
-        print(
-            '''
-wire PLL0LOCKEN_{site};
+        print('''
+wire QPLLLOCKEN_{site};
 
 (* KEEP, DONT_TOUCH *)
-LUT1 lut_{site} (.O(PLL0LOCKEN_{site}));
+LUT1 lut_{site} (.O(QPLLLOCKEN_{site}));
 
 (* KEEP, DONT_TOUCH, LOC = "{site}" *)
-GTPE2_COMMON gtpe2_common_{site} (
-    .PLL0LOCKEN(PLL0LOCKEN_{site})
+GTXE2_COMMON gtxe2_common_{site} (
+    .QPLLLOCKEN(QPLLLOCKEN_{site})
 );'''.format(site=site_name))
 
     print("endmodule")

@@ -59,7 +59,7 @@ def main():
     parser.add_argument(
         "--oneval",
         required=True,
-        help="Parameter value that correspodns to a set bit")
+        help="Parameter value that corresponds to a set bit")
     #
     parser.add_argument(
         "--multi", action="store_true", help="Are multiple bits expected?")

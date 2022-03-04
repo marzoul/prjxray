@@ -114,10 +114,10 @@ proc make_iob_sites {} {
 }
 
 proc assign_iobs_old {} {
-    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_00) IOSTANDARD LVCMOS33" [get_ports clk]
-    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_01) IOSTANDARD LVCMOS33" [get_ports di]
-    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_02) IOSTANDARD LVCMOS33" [get_ports do]
-    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_03) IOSTANDARD LVCMOS33" [get_ports stb]
+    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_00) IOSTANDARD LVCMOS18" [get_ports clk]
+    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_01) IOSTANDARD LVCMOS18" [get_ports di]
+    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_02) IOSTANDARD LVCMOS18" [get_ports do]
+    set_property -dict "PACKAGE_PIN $::env(XRAY_PIN_03) IOSTANDARD LVCMOS18" [get_ports stb]
 }
 
 proc assign_iobs {} {
@@ -129,9 +129,9 @@ proc assign_iobs {} {
     # Basic pins
     # XXX: not all pads are valid, but seems to be working for now
     # Maybe better to set to XRAY_PIN_* and take out of the list?
-    set_property -dict "PACKAGE_PIN [lindex $iopad 0] IOSTANDARD LVCMOS33" [get_ports clk]
-    set_property -dict "PACKAGE_PIN [lindex $iopad 1] IOSTANDARD LVCMOS33" [get_ports do]
-    set_property -dict "PACKAGE_PIN [lindex $iopad 2] IOSTANDARD LVCMOS33" [get_ports stb]
+    set_property -dict "PACKAGE_PIN [lindex $iopad 0] IOSTANDARD LVCMOS18" [get_ports clk]
+    set_property -dict "PACKAGE_PIN [lindex $iopad 1] IOSTANDARD LVCMOS18" [get_ports do]
+    set_property -dict "PACKAGE_PIN [lindex $iopad 2] IOSTANDARD LVCMOS18" [get_ports stb]
 
     # din bus
     set fixed_pins 3
@@ -139,7 +139,7 @@ proc assign_iobs {} {
     for {set i 0} {$i < [llength $iports]} {incr i} {
         set pad [lindex $iopad [expr $i+$fixed_pins]]
         set port [lindex $iports $i]
-        set_property -dict "PACKAGE_PIN $pad IOSTANDARD LVCMOS33" $port
+        set_property -dict "PACKAGE_PIN $pad IOSTANDARD LVCMOS18" $port
     }
 }
 
@@ -174,8 +174,8 @@ proc make_project_roi { roi_var exclude_roi_var } {
         resize_pblock [get_pblocks exclude_roi] -add "$roi"
     }
 
-    set_property CFGBVS VCCO [current_design]
-    set_property CONFIG_VOLTAGE 3.3 [current_design]
+    set_property CFGBVS GND [current_design]
+    set_property CONFIG_VOLTAGE 1.8 [current_design]
     set_property BITSTREAM.GENERAL.PERFRAMECRC YES [current_design]
     set_param tcl.collectionResultDisplayLimit 0
 

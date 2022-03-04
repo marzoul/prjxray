@@ -42,6 +42,15 @@ TILEGRID_TDB_DEPENDENCIES += gtp_channel/$(BUILD_FOLDER)/segbits_tilegrid.tdb
 TILEGRID_TDB_DEPENDENCIES += gtp_int_interface/$(BUILD_FOLDER)/segbits_tilegrid.tdb
 endif
 
+# Virtex7 only fuzzers
+ifeq (${XRAY_DATABASE}, virtex7)
+TILEGRID_TDB_DEPENDENCIES += pcie/$(BUILD_FOLDER)/segbits_tilegrid.tdb
+TILEGRID_TDB_DEPENDENCIES += pcie_int_interface/$(BUILD_FOLDER)/segbits_tilegrid.tdb
+TILEGRID_TDB_DEPENDENCIES += gtp_common/$(BUILD_FOLDER)/segbits_tilegrid.tdb
+TILEGRID_TDB_DEPENDENCIES += gtp_channel/$(BUILD_FOLDER)/segbits_tilegrid.tdb
+TILEGRID_TDB_DEPENDENCIES += gtp_int_interface/$(BUILD_FOLDER)/segbits_tilegrid.tdb
+endif
+
 # Zynq7 only fuzzers
 ifeq (${XRAY_DATABASE}, zynq7)
 TILEGRID_TDB_DEPENDENCIES += ps7_int/$(BUILD_FOLDER)/segbits_tilegrid.tdb

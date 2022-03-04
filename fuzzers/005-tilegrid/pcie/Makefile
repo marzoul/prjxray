@@ -5,6 +5,6 @@
 # https://opensource.org/licenses/ISC
 #
 # SPDX-License-Identifier: ISC
-N ?= 2
-GENERATE_ARGS?="--oneval 0 --design params.csv --dframe 1c --dword 0 --dbit 16"
+N ?= 8
+GENERATE_ARGS?="--oneval 1 --design params.csv --dword 0 --auto-frame"
 include ../fuzzaddr/common.mk

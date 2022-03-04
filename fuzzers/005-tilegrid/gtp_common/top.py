@@ -23,7 +23,7 @@ def gen_sites():
         gridinfo = grid.gridinfo_at_loc(loc)
 
         for site_name, site_type in gridinfo.sites.items():
-            if site_type in ['GTPE2_COMMON']:
+            if site_type in ['GTXE2_COMMON']:
                 yield tile_name, site_name
 
 
@@ -47,11 +47,9 @@ module top(input wire in, output wire out);
         params[tile_name] = (site_name, isone)
 
         attr = 4 if isone else 5
-        print(
-            '''
+        print('''
     (* KEEP, DONT_TOUCH, LOC="{site}" *)
-    GTPE2_COMMON #(
-        .PLL0_FBDIV_45({attr})
+    GTXE2_COMMON #(
     ) {site} ();'''.format(attr=attr, site=site_name))
 
     print("endmodule")

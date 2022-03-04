@@ -47,12 +47,12 @@ module top(input wire in, output wire out);
         params[tile_name] = (site_name, isone)
 
         attr = "FALSE" if isone else "TRUE"
-        print(
-            '''
-    (* KEEP, DONT_TOUCH*)
+        print('''
+    (* KEEP, DONT_TOUCH, LOC = "{site}"*)
     PCIE_2_1 #(
-        .AER_CAP_PERMIT_ROOTERR_UPDATE("{}")
-    ) pcie ();'''.format(attr))
+        .AER_CAP_PERMIT_ROOTERR_UPDATE("{attr}")
+    ) {site} ();
+    '''.format(attr=attr, site=site_name))
 
     print("endmodule")
     write_params(params)

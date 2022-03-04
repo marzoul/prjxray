@@ -5,9 +5,9 @@
 # https://opensource.org/licenses/ISC
 #
 # SPDX-License-Identifier: ISC
-N ?= 6
+N ?= 12
 # Was expecting oneval 3, but bits might be inverted
 # FIXME: dword
 # Ex: 0002009D_029_15
-GENERATE_ARGS?="--oneval 2 --design params.csv --dframe 1D --dword 29 --dbit 15"
+GENERATE_ARGS?="--oneval 2 --design params.csv --dword 0 --auto-frame"
 include ../fuzzaddr/common.mk
