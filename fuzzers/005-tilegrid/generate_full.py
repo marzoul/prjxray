@@ -320,10 +320,10 @@ def propagate_INT_INTERFACE_bits_in_column(
 
 
 def propagate_rebuf(database, tiles_by_grid):
-    """ Writing a fuzzer for the CLK_BUFG_REBUF tiles is hard, so propigate from CLK_HROW tiles.
+    """ Writing a fuzzer for the CLK_BUFG_REBUF tiles is hard, so propagate from CLK_HROW tiles.
 
     In the clock column, there is a CLK_BUFG_REBUF above and below the CLK_HROW
-    tile.  Each clock column appears to use the same offsets, so propigate
+    tile.  Each clock column appears to use the same offsets, so propagate
     the base address and frame count, and update the offset and word count.
 
     """
@@ -340,8 +340,9 @@ def propagate_rebuf(database, tiles_by_grid):
         assert database[rebuf_above]['type'] == 'CLK_BUFG_REBUF', database[
             rebuf_below]['type']
 
+        print("tile_name {} database {}".format(tile_name, database[tile_name]['bits']['CLB_IO_CLK']))
         assert database[tile_name]['bits']['CLB_IO_CLK'][
-            'offset'] == 42, database[tile_name]['bits']['CLB_IO_CLK']
+            'offset'] == 42, "Tile {} database {}".format(tile_name, database[tile_name]['bits']['CLB_IO_CLK'])
         database[rebuf_below]['bits'] = copy.deepcopy(
             database[tile_name]['bits'])
         database[rebuf_below]['bits']['CLB_IO_CLK']['offset'] = 73
@@ -555,7 +556,7 @@ def run(json_in_fn, json_out_fn, verbose=False):
         database, tiles_by_grid, tile_frames_map, verbose=verbose)
     propagate_INT_bits_in_column(database, tiles_by_grid, tile_frames_map)
     propagate_INT_INTERFACE_bits_in_column(
-        database, tiles_by_grid, "GTP_INT_INTERFACE", tile_frames_map)
+        database, tiles_by_grid, "GTX_INT_INTERFACE", tile_frames_map)
     propagate_INT_INTERFACE_bits_in_column(
         database, tiles_by_grid, "PCIE_INT_INTERFACE", tile_frames_map)
     propagate_rebuf(database, tiles_by_grid)

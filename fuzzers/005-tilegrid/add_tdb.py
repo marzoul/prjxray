@@ -49,11 +49,13 @@ def load_db(fn):
         addrlist = parts[1:]
 
         # Debug code
+        # FIXME This should be in check_frames
         if any(s == '<const0>' or s == '<const1>' for s in addrlist):
           print("Issue with: {}".format(l))
           continue
 
         # Original assert code
+        # FIXME This should be in check_frames
         assert not any(s == '<const0>' for s in addrlist), (fn, l)
 
         check_frames(tagstr, addrlist)
