@@ -6,11 +6,11 @@ export XRAY_DATABASE="virtex7"
 # https://opensource.org/licenses/ISC
 #
 # SPDX-License-Identifier: ISC
-export XRAY_PART="xc7vx330tffg1761-1"
+export XRAY_PART="xc7vx415tffg1927-1"
 export XRAY_ROI_FRAMES="0x00000000:0xffffffff"
 
 # All CLB's in part, all BRAM's in part, all DSP's in part.
-export XRAY_ROI_TILEGRID="SLICE_X0Y0:SLICE_X151Y349 RAMB18_X0Y0:RAMB18_X10Y139 RAMB36_X0Y0:RAMB36_X10Y69 DSP48_X0Y0:DSP48_X7Y139"
+export XRAY_ROI_TILEGRID="SLICE_X0Y0:SLICE_X221Y299 RAMB18_X0Y0:RAMB18_X14Y119 RAMB36_X0Y0:RAMB36_X14Y59 DSP48_X0Y0:DSP48_X17Y119"
 
 export XRAY_EXCLUDE_ROI_TILEGRID=""
 
@@ -18,7 +18,7 @@ export XRAY_EXCLUDE_ROI_TILEGRID=""
 # (special handling for frame addresses of certain IOIs -- see the script for details).
 # This needs to be changed for any new device!
 # If you have a FASM mismatch or unknown bits in IOIs, CHECK THIS FIRST.
-export XRAY_IOI3_TILES="LIOI3_X0Y9"
+export XRAY_IOI3_TILES=""
 
 source $(dirname ${BASH_SOURCE[0]})/../utils/environment.sh
 

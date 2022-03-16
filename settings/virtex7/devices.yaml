@@ -1,3 +1,23 @@
 # device to fabric mapping
 "xc7v585t":
   fabric: "xc7v585t"
+"xc7v2000t":
+  fabric: "xc7v2000t"
+"xc7vx330t":
+  fabric: "xc7vx330t"
+"xc7vx415t":
+  fabric: "xc7vx415t"
+"xc7vx485t":
+  fabric: "xc7vx485t"
+"xc7vx550t":
+  fabric: "xc7vx690t"
+"xc7vx690t":
+  fabric: "xc7vx690t"
+"xc7vx980t":
+  fabric: "xc7vx980t"
+"xc7vx1140t":
+  fabric: "xc7vx1140t"
+"xc7vh580t":
+  fabric: "xc7vh580t"
+"xc7vh870t":
+  fabric: "xc7vh870t"
