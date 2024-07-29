@@ -188,7 +188,7 @@ $(foreach DB,$(DATABASES),$(eval $(call database,$(DB))))
 # --------------------------------------
 
 ARTIX_PARTS=artix7_50t artix7_200t
-ZYNQ_PARTS=zynq7010
+ZYNQ_PARTS=zynq7010 zynq7045
 KINTEX_PARTS=kintex7_160t
 SPARTAN_PARTS=
 
